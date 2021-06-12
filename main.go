@@ -52,16 +52,20 @@ func getDoc(file []string) []string {
 
 func merge(dir string) []string {
 	files := files(dir)
-	var merged [][]string
+	var merged []string
+	var file []string
 
-	// not to sure about 2d array here, it should be one, except getDoc return []string, possibly write an inner loop that
-	// loops the readdoc [j]string into the merged []string
-	for i := 0; i < len(dir); i++ {
-		merged = append(merged, getDoc(readFile(dir+"/"+files[i])))
+	for i := 0; i < len(files); i++ {
+		file = getDoc(readFile(dir + "/" + files[i]))
+		for j := 0; j < len(file); j++ {
+			merged = append(merged, file[j])
+		}
 	}
 
 	return merged
 }
+
+// need to write a function that can create pre-amble for merged document
 
 func main() {
 
