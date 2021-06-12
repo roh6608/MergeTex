@@ -35,18 +35,35 @@ func readFile(filepath string) []string {
 }
 
 // A function to trim the head and foot of tex files
-func getDoc(file []string) {
+func getDoc(file []string) []string {
+	var start int
+	var end int
 
-	// grab everything between \begin{document} and \end{document}, will also have to write a function that can right a new
-	// pre-amble for the merged document
+	for i := 0; i < len(file); i++ {
+		if file[i] == `\begin{document}` {
+			start = i
+		} else if file[i] == `\end{document}` {
+			end = i
+		}
+	}
+
+	return (file[start:end])
+}
+
+func merge(dir string) []string {
+	files := files(dir)
+	var merged [][]string
+
+	// not to sure about 2d array here, it should be one, except getDoc return []string, possibly write an inner loop that
+	// loops the readdoc [j]string into the merged []string
+	for i := 0; i < len(dir); i++ {
+		merged = append(merged, getDoc(readFile(dir+"/"+files[i])))
+	}
+
+	return merged
 }
 
 func main() {
 
-	dir := files(".")
-	file := readFile(dir[1])
-
-	for i := 0; i < len(file); i++ {
-		fmt.Println(file[i])
-	}
+	// will take command line flag arguments here
 }
