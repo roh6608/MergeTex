@@ -18,7 +18,7 @@ To install the binaries so they are accessable anywhere within the computer, fol
 An example use of the MergeTex application is shown below. Where the ```-i``` flag signifies the input directory that contains the .tex files to be merged together. These files are to be ordered in the directory in the order they are to be merged. The ```-o``` flag signifies the output of the merged file.
 
 ```
-./MergeTex -i ./directory -o merged.tex
+./bin/MergeTex -i ./test/files -o merged.tex
 ```
 The merged.tex file can than added to a tex file using the input command as shown below.
 
