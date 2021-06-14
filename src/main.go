@@ -35,6 +35,7 @@ func readFile(filepath string) []string {
 	return lines
 }
 
+// A function to write the merged function to a file
 func writeFile(filepath string, doc []string) {
 	// add error checking
 	f, _ := os.Create(filepath)
@@ -79,13 +80,6 @@ func merge(dir string) []string {
 	return merged
 }
 
-// need to write a function that can create pre-amble for merged document
-// need to also add in error checking etc.
-// create source and bin directory, also create tests, etc.
-// finish writing this version in go then create a new branch for the c version
-// function to write the merged document to a file
-// function to delete anything that will fail the compilation
-
 func main() {
 
 	// will take command line flag arguments here
@@ -93,6 +87,7 @@ func main() {
 	// later will add options for mergin pre-ambles and formatting etc.
 	// add standalone options similar to pandoc, this can be the flag that creates the whole document and doesnt just merge
 	// the .tex between begin and end
+	// -s flag for standalone merged tex file
 
 	inDir := flag.String("i", ".", "The directory containing the files to be merged.")
 	out := flag.String("o", ".", "The filename of he merged output.")
