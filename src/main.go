@@ -8,6 +8,19 @@ import (
 	"os"
 )
 
+// A function remove duplicates in an string arrays
+func removeDup(stringSlice []string) []string {
+	keys := make(map[string]bool)
+	list := []string{}
+	for _, entry := range stringSlice {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+	return list
+}
+
 // A function to return the files in the directory passed to it
 func files(directory string) []string {
 	dir, _ := ioutil.ReadDir(directory)
@@ -57,7 +70,7 @@ func getDoc(file []string) []string {
 		if file[i] == `\begin{document}` {
 			start = i + 1
 		} else if file[i] == `\end{document}` {
-			end = i
+			end = i - 1
 		}
 	}
 
@@ -80,20 +93,78 @@ func merge(dir string) []string {
 	return merged
 }
 
+// A function to get the preambles from the .tex files to be merged.
+func getPreamble(file []string) []string {
+	var start int
+	var end int
+
+	for i := 0; i < len(file); i++ {
+		if file[i][0:13] == `\documentclass` {
+			start = i + 1
+		} else if file[i] == `\begin{document}` {
+			end = i - 1
+		} else {
+			fmt.Println(`The .tex file is malformed, it is missing \documentclass and/or \begin{document}.`)
+
+		}
+
+	}
+
+	preamble := file[start:end]
+
+	return preamble
+
+}
+
+// A function to merge the preambles of the .tex files
+func mergePreamble(dir string) []string {
+	files := files(dir)
+	var merged []string
+	var preamble []string
+
+	for i := 0; i < len(dir); i++ {
+		preamble = getPreamble(readFile(dir + "/" + files[i]))
+		for j := 0; j < len(preamble); j++ {
+			merged = append(merged, preamble[j])
+		}
+	}
+
+	return merged
+
+}
+
+// A function to return a standalone document that should be ready to be compiled
+func standaloneDoc(dir string) []string {
+	var documentclass []string
+	var begin []string
+	var end []string
+	documentclass[0] = `\documentclass[12pt]{article}`
+	begin[0] = `\begin{document}`
+	end[0] = `\end{document}`
+
+	tmp := append(documentclass, mergePreamble(dir)...)
+	tmp = append(tmp, begin...)
+	return append(tmp, end...)
+
+}
+
 func main() {
 
-	// will take command line flag arguments here
-	// arguments needed will be, directory of files, merged output name and location
+	// allow an option where they can pass a pre-amble as well
 	// later will add options for mergin pre-ambles and formatting etc.
-	// add standalone options similar to pandoc, this can be the flag that creates the whole document and doesnt just merge
-	// the .tex between begin and end
 	// -s flag for standalone merged tex file
 
-	inDir := flag.String("i", ".", "The directory containing the files to be merged.")
+	in := flag.String("i", ".", "The directory containing the files to be merged.")
 	out := flag.String("o", ".", "The filename of he merged output.")
+	standalone := flag.Bool("s", false, "If the merged document should be standalone")
 
 	flag.Parse()
 
-	writeFile(*out, merge(*inDir))
+	if *standalone == false {
+		writeFile(*out, merge(*in))
+
+	} else if *standalone == true {
+		writeFile(*out, standaloneDoc(*in))
+	}
 
 }
