@@ -20,6 +20,21 @@ An example use of the MergeTex application is shown below. Where the ```-i``` fl
 ```
 ./MergeTex -i ./directory -o merged.tex
 ```
+The merged.tex file can than added to a tex file using the input command as shown below.
+
+```latex
+.
+.
+.
+% preamble above
+
+\begin{document}
+
+\input{merged.tex}
+
+\end{document}
+
+```
 
 ### Options
 MergeTex takes command line flag arguments, the arguments it taks can be listed by running;
@@ -31,7 +46,6 @@ This will list the flags, the defaults and what arguments are expected.
 
 ## Authors
 - [Rohan](https://github.com/roh6608)
-## Contributing
 
 ## Licence
 This application is licenced under the Apache 2.0 licence. More information can be found in the [Licence](https://github.com/roh6608) file.
