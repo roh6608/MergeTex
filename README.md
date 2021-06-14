@@ -30,7 +30,7 @@ MergeTex takes command line flag arguments, the arguments it taks can be listed 
 This will list the flags, the defaults and what arguments are expected.
 
 ## Authors
-- https://github.com/roh6608
+- [Rohan](https://github.com/roh6608)
 ## Contributing
 
 ## Licence
